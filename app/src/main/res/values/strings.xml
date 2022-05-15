@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MyMangaApp</string>
+    <string name="database">MyMangaAppDb.db</string>
 </resources>

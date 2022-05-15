@@ -1,0 +1,519 @@
+swagger: "2.0"
+info:
+  description: "API description used by MyMangaApp"
+  version: "1.0.0"
+  title: "API used by MyMangaApp"
+host: "api.magadex.org"
+tags:
+- name: "Manga"
+  description: "Manga related operations"
+- name: "Cover"
+  description: "Manga Cover related operations"
+- name: "Auth"
+  description: "Authentication related operations"
+
+schemes:
+- "http"
+paths:
+  /auth/login:
+    post:
+      tags:
+      - "Auth"
+      summary: "Login"
+      operationId: "Login"
+      produces:
+      - "application/json"
+      parameters:
+        - name: "LoginParameters"
+          in: "body"
+          schema:
+            $ref: "#/definitions/Login"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/LoginResponse"
+        "400":
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        "401":
+          description: "Unathozired"
+  /auth/check:
+    get:
+      tags:
+      - "Auth"
+      summary: "Check Token"
+      operationId: "get-auth-check"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/CheckResponse"
+  /auth/refresh:
+    post:
+      tags:
+      - "Auth"
+      summary: "Refresh Token"
+      operationId: "post-auth-refresh"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "Refresh-Token"
+        in: "body"
+        description: "Refresh Token"
+        required: true
+        schema:
+          $ref: '#/definitions/RefreshToken'
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/RefreshResponse"
+        "400":
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        "401":
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        "403":
+          description: "Forbidden"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /manga:
+    get:
+      tags:
+      - "Manga"
+      summary: "Manga List"
+      operationId: "get-search-manga"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "limit"
+        in: "query"
+        type: "integer"
+        default: 10
+        minimum: 0
+        maximum: 100
+      - name: "offset"
+        in: "query"
+        type: "integer"
+        minimum: 0
+      - name: "title"
+        in: "query"
+        type: "string"
+      responses:
+        "200":
+          description: "Manga list"
+          schema:
+            $ref: "#/definitions/MangaList"
+        "400":
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+            
+  /manga/{id}:
+    parameters:
+      - name: "id"
+        type: "string"
+        format: "uuid"
+        in: "path"
+        required: true
+        description: "Manga ID"
+    get:
+      summary: "Get Manga"
+      description: "Get Manga"
+      operationId: "get-manga-id"
+      tags:
+        - "Manga"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/MangaResponse"
+        "403":
+          description: "Forbidden"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        "404":
+          description: "Manga no content"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+            
+  /cover/{mangaOrCoverId}:
+    parameters:
+      - name: "mangaOrCoverId"
+        type: "string"
+        format: "uuid"
+        description: "Manga UUID on POST"
+        in: "path"
+        required: true
+    get:
+      summary: "Get Cover"
+      tags:
+        - "Cover"
+      operationId: "get-cover-id"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/CoverResponse"
+        "400":
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        "403":
+          description: "Forbidden"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        "404":
+          description: "CoverArt not found"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  
+definitions:
+  LoginResponse:
+    title: "LoginResponse"
+    type: "object"
+    properties:
+      result:
+        type: "string"
+        enum:
+          - "ok"
+          - "error"
+      token:
+        type: "object"
+        properties:
+          session:
+            type: "string"
+          refresh:
+            type: "string"
+            
+  CheckResponse:
+    title: "CheckResponse"
+    type: "object"
+    description: "Check Response"
+    properties:
+      result:
+        type: "string"
+        default: "ok"
+      isAuthenticated:
+        type: "boolean"
+      roles:
+        type: "array"
+        items:
+          type: "string"
+      permissions:
+        type: "array"
+        items:
+          type: "string"
+  ErrorResponse:
+    title: "ErrorResponse"
+    type: "object"
+    properties:
+      result:
+        type: "string"
+        default: "error"
+      errors:
+        type: "array"
+        items:
+          $ref: "#/definitions/Error"
+          
+  Error:
+      title: "Error"
+      type: "object"
+      properties:
+        id:
+          type: "string"
+        status:
+          type: "integer"
+        title:
+          type: "string"
+        detail:
+          type: "string"
+  RefreshResponse:
+      title: "RefreshResponse"
+      type: "object"
+      properties:
+        result:
+          type: "string"
+          enum:
+            - "ok"
+            - "error"
+        token:
+          type: "object"
+          properties:
+            session:
+              type: "string"
+            refresh:
+              type: "string"
+        message:
+          type: "string"
+      required:
+        - "result"
+        
+  MangaList:
+    title: "MangaList"
+    type: "object"
+    properties:
+      result:
+        type: "string"
+        default: "ok"
+      response:
+        type: "string"
+        default: "collection"
+      data:
+        type: "array"
+        items:
+          $ref: "#/definitions/Manga"
+      limit:
+        type: "integer"
+      offset:
+        type: "integer"
+      total:
+        type: "integer"
+        
+  Manga:
+    title: "Manga"
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        format: uuid
+      type:
+        type: "string"
+        enum:
+          - "manga"
+      attributes:
+        $ref: "#/definitions/MangaAttributes"
+      relationships:
+        type: array
+        items:
+          $ref: "#/definitions/Relationship"
+          
+  MangaAttributes:
+    title: "MangaAttributes"
+    type: "object"
+    properties:
+      title:
+        $ref: "#/definitions/LocalizedString"
+      altTitles:
+        type: "array"
+        items:
+          $ref: "#/definitions/LocalizedString"
+      description:
+        $ref: "#/definitions/LocalizedString"
+      isLocked:
+        type: "boolean"
+      links:
+        type: "object"
+        additionalProperties:
+          type: "string"
+      originalLanguage:
+        type: "string"
+      lastVolume:
+        type: string
+      lastChapter:
+        type: "string"
+      publicationDemographic:
+        type: "string"
+        enum:
+          - "shounen"
+          - "shoujo"
+          - "josei"
+          - "seinen"
+      status:
+        type: "string"
+        enum:
+          - "completed"
+          - "ongoing"
+          - "cancelled"
+          - "hiatus"
+      year:
+        type: "integer"
+        description: "Year of release"
+      contentRating:
+        type: "string"
+        enum:
+          - "safe"
+          - "suggestive"
+          - "erotica"
+          - "pornographic"
+      chapterNumbersResetOnNewVolume:
+        type: "boolean"
+      availableTranslatedLanguages:
+        type: "array"
+        items:
+          type: "string"
+      tags:
+        type: "array"
+        items:
+          $ref: "#/definitions/Tag"
+      state:
+        type: string
+        enum: ["draft", "submitted", "published", "rejected"]
+      version:
+        type: integer
+        minimum: 1
+      createdAt:
+        type: string
+      updatedAt:
+        type: string
+        
+  LocalizedString:
+    type: "object"
+    title: "LocalizedString"
+    additionalProperties:
+      type: "string"
+      pattern: "^[a-z]{2,8}$"
+      
+  Relationship:
+    title: "Relationship"
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        format: "uuid"
+      type:
+        type: "string"
+      related:
+        type: "string"
+        enum: ["monochrome", "main_story", "adapted_from", "based_on", "prequel", "side_story", "doujinshi", "same_franchise", "shared_universe", "sequel", "spin_off", "alternate_story", "alternate_version", "preserialization", "colored", "serialization"]
+        description: "Related Manga type, only present if you are on a Manga entity and a Manga relationship"
+      attributes:
+        description: "If Reference Expansion is applied, contains objects attributes"
+        type: "object"
+        
+  Tag:
+    title: "Tag"
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        format: "uuid"
+      type:
+        type: "string"
+        enum:
+          - "tag"
+      attributes:
+        $ref: "#/definitions/TagAttributes"
+      relationships:
+        type: array
+        items:
+          $ref: "#/definitions/Relationship"
+          
+  TagAttributes:
+    title: "TagAttributes"
+    type: "object"
+    properties:
+      name:
+        $ref: "#/definitions/LocalizedString"
+      description:
+        $ref: "#/definitions/LocalizedString"
+      group:
+        type: "string"
+      version:
+        type: "integer"
+        minimum: 1
+        
+  MangaResponse:
+    title: "MangaResponse"
+    type: "object"
+    properties:
+      result:
+        type: "string"
+        enum:
+          - "ok"
+          - "error"
+      response:
+        type: "string"
+        default: "entity"
+      data:
+        $ref: "#/definitions/Manga"
+        
+  CoverResponse:
+      title: "CoverResponse"
+      type: "object"
+      properties:
+        result:
+          type: "string"
+        response:
+          type: "string"
+          default: "entity"
+        data:
+          $ref: "#/definitions/Cover"
+  Cover:
+    title: "Cover"
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        format: "uuid"
+      type:
+        type: "string"
+        enum:
+          - "cover_art"
+      attributes:
+        $ref: "#/definitions/CoverAttributes"
+      relationships:
+        type: "array"
+        items:
+          $ref: "#/definitions/Relationship"
+  CoverAttributes:
+    title: "CoverAttributes"
+    type: "object"
+    properties:
+      volume:
+        type: "string"
+      fileName:
+        type: "string"
+      description:
+        type: "string"
+      locale:
+        type: "string"
+      version:
+        type: "integer"
+        minimum: 1
+      createdAt:
+        type: "string"
+      updatedAt:
+        type: "string"
+        
+  Login:
+    type: "object"
+    title: "Login"
+    additionalProperties: false
+    properties:
+      username:
+        type: "string"
+        minLength: 1
+        maxLength: 64
+      email:
+        type: "string"
+      password:
+        type: "string"
+        minLength: 8
+        maxLength: 1024
+    required:
+      - "password"
+      
+  RefreshToken:
+    type: "object"
+    title: "RefreshToken"
+    additionalProperties: false
+    properties:
+      token:
+        type: "string"
+        minLength: 1
+    required:
+      - "token"

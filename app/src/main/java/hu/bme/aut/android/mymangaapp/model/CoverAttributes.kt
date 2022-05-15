@@ -9,6 +9,6 @@ data class CoverAttributes(
     val locale: String,
     val createdAt: Date,
     val updatedAt: Date,
-    val version: Integer,
+    val version: Int,
     val relationships: List<Relationship>
 )

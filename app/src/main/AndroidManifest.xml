@@ -10,4 +10,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyMangaApp" />
 
+    <use-sdk android:minSdkVersion="21" android:targetSdkVersion="31" />
+
 </manifest>

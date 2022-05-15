@@ -106,5 +106,5 @@ dependencies {
     testImplementation "org.robolectric:robolectric:$versions.robolectricVersion"
     androidTestImplementation "com.google.truth:truth:$versions.truthVersion"
     androidTestImplementation "androidx.test.ext:junit:$versions.androidxTestJunit"
-    androidTestImplementation "com.android.support.test:runner:$versions.androidTestRunner"
+    androidTestImplementation "com.android.support.test:runner"
 }

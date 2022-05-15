@@ -14,7 +14,7 @@ interface MangaService {
     suspend fun authRefresh(@Body refreshToken: RefreshToken): RefreshResponse
 
     @GET("/manga")
-    suspend fun getManga(@Query("limit") limit: Integer, @Query("offset") offset: Integer, @Query("title") title: String): MangaList
+    suspend fun getManga(@Query("limit") limit: Int, @Query("offset") offset: Int, @Query("title") title: String): MangaList
 
     @GET("/manga/{id}")
     suspend fun getMangaFromId(@Path("id") id: String): MangaById

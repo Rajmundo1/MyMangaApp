@@ -1,6 +1,5 @@
 package hu.bme.aut.android.mymangaapp.persistence
 
-import hu.bme.aut.android.mymangaapp.model.MangaData
 import hu.bme.aut.android.mymangaapp.utils.MockTestUtil.mockMangaData
 import hu.bme.aut.android.mymangaapp.utils.MockTestUtil.mockMangaDataList
 import kotlinx.coroutines.runBlocking

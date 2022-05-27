@@ -3,9 +3,13 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
+    id 'kotlin-android-extensions'
 }
 
 apply from: '../dependencies.gradle'
+apply plugin: 'kotlin-android'
+apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion versions.compileSdk
@@ -33,21 +37,19 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-
-
-    //ADDED NEW STUFF
-    buildFeatures {
-        compose true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion versions.composeVersion
-    }
 }
 
 dependencies {
 
+    implementation platform('com.google.firebase:firebase-bom:30.0.2')
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+
     // material
     implementation "com.google.android.material:material:$versions.materialVersion"
+
+
+    implementation 'com.squareup.picasso:picasso:2.8'
 
     // compose
     implementation "androidx.compose.ui:ui:$versions.composeVersion"
@@ -115,5 +117,15 @@ dependencies {
     testImplementation "org.robolectric:robolectric:$versions.robolectricVersion"
     androidTestImplementation "com.google.truth:truth:$versions.truthVersion"
     androidTestImplementation "androidx.test.ext:junit:$versions.androidxTestJunit"
+    implementation "androidx.core:core-ktx:+"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     //androidTestImplementation "com.android.support.test:runner"
+}
+
+apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
+
+apply plugin: 'com.google.firebase.crashlytics'
+repositories {
+    mavenCentral()
 }

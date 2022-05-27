@@ -5,7 +5,7 @@ import java.util.*
 data class MangaAttributes(
     val title: LocalizedString,
     val altTitles: ArrayList<AltTitle>?,
-    val descriptionval: LocalizedString?,
+    val description: LocalizedString?,
     val isLockedval: Boolean?,
     val links: Links?,
     val originalLanguageval: String?,

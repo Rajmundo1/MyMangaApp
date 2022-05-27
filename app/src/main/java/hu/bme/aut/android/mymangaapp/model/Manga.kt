@@ -14,6 +14,8 @@ data class Manga(
     val year: String,
     val state: String,
     var picUrl: String,
+    var coverArtId: String,
+    var coverArtFileName: String
 ){
     companion object{
         fun mock() = Manga(
@@ -23,7 +25,9 @@ data class Manga(
             year = "Mock date",
             state = "Mock state",
             description = "Mock desc",
-            picUrl = "https://thumbs.dreamstime.com/z/raccoon-face-cute-animal-kids-cartoon-style-raccoon-face-cute-animal-kids-cartoon-style-suitable-as-placeholder-avatar-kids-t-199675791.jpg"
+            picUrl = "https://thumbs.dreamstime.com/z/raccoon-face-cute-animal-kids-cartoon-style-raccoon-face-cute-animal-kids-cartoon-style-suitable-as-placeholder-avatar-kids-t-199675791.jpg",
+            coverArtId = "",
+            coverArtFileName = ""
         )
     }
 }

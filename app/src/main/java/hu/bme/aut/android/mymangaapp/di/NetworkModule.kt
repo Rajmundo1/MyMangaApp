@@ -12,7 +12,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import hu.bme.aut.android.mymangaapp.model.Manga
 import hu.bme.aut.android.mymangaapp.network.MangaService
 import hu.bme.aut.android.mymangaapp.network.RequestInterceptor
 import okhttp3.OkHttpClient

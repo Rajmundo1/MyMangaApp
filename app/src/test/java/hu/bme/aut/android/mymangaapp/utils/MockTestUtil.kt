@@ -1,16 +1,17 @@
 package hu.bme.aut.android.mymangaapp.utils
 
+import hu.bme.aut.android.mymangaapp.model.Manga
 import hu.bme.aut.android.mymangaapp.model.MangaData
 
 object MockTestUtil {
 
-    fun mockMangaData() = MangaData.mock()
+    fun mockManga() = Manga.mock()
 
-    fun mockMangaDataList(): List<MangaData>{
-        var mockDatas = mutableListOf<MangaData>()
+    fun mockMangaList(): List<Manga>{
+        var mockDatas = mutableListOf<Manga>()
 
         repeat(5) {
-            mockDatas.add(MangaData.mock())
+            mockDatas.add(Manga.mock())
         }
 
         return mockDatas

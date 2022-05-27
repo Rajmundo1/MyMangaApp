@@ -2,7 +2,6 @@ package hu.bme.aut.android.mymangaapp.model
 
 import android.icu.text.CaseMap.Title
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 data class Attributes (

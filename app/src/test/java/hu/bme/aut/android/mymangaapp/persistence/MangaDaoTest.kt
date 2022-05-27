@@ -1,8 +1,7 @@
 package hu.bme.aut.android.mymangaapp.persistence
 
-import hu.bme.aut.android.mymangaapp.model.MangaData
-import hu.bme.aut.android.mymangaapp.utils.MockTestUtil.mockMangaData
-import hu.bme.aut.android.mymangaapp.utils.MockTestUtil.mockMangaDataList
+import hu.bme.aut.android.mymangaapp.utils.MockTestUtil.mockManga
+import hu.bme.aut.android.mymangaapp.utils.MockTestUtil.mockMangaList
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.Is.`is`
@@ -25,19 +24,21 @@ class MangaDaoTest : LocalDatabase() {
 
     @Test
     fun insertAndLoadMangaDataListTest() = runBlocking {
-        val mockDataList = mockMangaDataList()
-        mangaDao.insertMangaDataList(mockDataList)
+        val mockMangaList = mockMangaList()
+        mangaDao.insertMangaList(mockMangaList)
 
-        val loadFromDB = mangaDao.getMangaDataList()
-        assertThat(loadFromDB.toString(), `is`(mockDataList.toString()))
+        val loadFromDB = mangaDao.getMangaList()
+        assertThat(loadFromDB[0].toString(), `is`(mockMangaList[0].toString()))
     }
+
 
     @Test
     fun insertAndLoadMangaDataTest() = runBlocking {
-        val mockData = mockMangaData()
-        mangaDao.insertMangaData(mockData)
+        val mockManga = mockManga()
+        mangaDao.insertMangaList(listOf(mockManga))
 
-        val loadFromDB = mangaDao.getMangaDataList()
-        assertThat(loadFromDB[0].toString(), `is`(mockData.toString()))
+        val loadFromDB = mangaDao.getMangaList()
+        assertThat(loadFromDB[0].toString(), `is`(mockManga.toString()))
     }
+
 }
